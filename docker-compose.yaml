@@ -1,0 +1,47 @@
+name: sl
+
+services:
+  app:
+    container_name: app
+    build:
+      context: app
+      dockerfile: Dockerfile
+    command: sleep infinity
+    networks:
+      steveludwig:
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./app:/app
+
+  db:
+    hostname: db
+    container_name: db
+    image: mysql:5.7.27
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=qwerty
+      - MYSQL_USER=sl
+      - MYSQL_DATABASE=mydb
+    volumes:
+      - mysql_vol:/var/lib/mysql
+      - ./mysql/dump_pv.sql:/docker-entrypoint-initdb.d/dump.sql
+    ports: 
+      - "3306:3306"
+    command: [
+      'mysqld', 
+      '--character-set-server=utf8mb4', 
+      '--collation-server=utf8mb4_unicode_ci', 
+      '--skip-character-set-client-handshake'
+    ]
+    networks:
+      steveludwig:
+
+volumes:
+  mysql_vol:
+
+networks:
+  steveludwig:
+
