@@ -10,11 +10,26 @@ services:
     networks:
       steveludwig:
     ports:
+      - "4567:4567"
+    depends_on:
+      - db
+    volumes:
+      - ./app:/home/ubuntu/app
+
+  test:
+    container_name: test
+    build:
+      context: gradle_java
+      dockerfile: Dockerfile
+    command: sleep infinity
+    networks:
+      steveludwig:
+    ports:
       - "8000:8000"
     depends_on:
       - db
     volumes:
-      - ./app:/app
+      - ./gradle_java:/home/ubuntu/app
 
   db:
     hostname: db
@@ -27,7 +42,7 @@ services:
       - MYSQL_DATABASE=mydb
     volumes:
       - mysql_vol:/var/lib/mysql
-      - ./mysql/dump_pv.sql:/docker-entrypoint-initdb.d/dump.sql
+      - ./mysql/dump.sql:/docker-entrypoint-initdb.d/dump.sql
     ports: 
       - "3306:3306"
     command: [

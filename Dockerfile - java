@@ -15,8 +15,9 @@ RUN wget https://downloads.apache.org/maven/maven-3/3.9.8/binaries/apache-maven-
     ln -s /opt/apache-maven-3.9.8/bin/mvn /usr/bin/mvn && \
     rm apache-maven-3.9.8-bin.tar.gz
 
+# Set MAVEN_HOME environment variable
 ENV MAVEN_HOME=/opt/apache-maven-3.9.8
 ENV PATH="${MAVEN_HOME}/bin:${PATH}"
 
-COPY . /app
-WORKDIR /app
+COPY . /home/ubuntu/app
+WORKDIR /home/ubuntu/app
